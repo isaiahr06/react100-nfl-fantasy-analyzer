@@ -1,9 +1,14 @@
-function Comparison() {
-  return (
+function Comparison(){
+
+  return(
     <section>
-      <h2>Comparison</h2>
+      <h2>
+        Player Comparison
+      </h2>
     </section>
-  );
+  )
+
 }
+
 
 export default Comparison;
