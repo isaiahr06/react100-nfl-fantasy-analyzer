@@ -1,57 +1,27 @@
-function PlayerCard({ player }) {
-
-
+function PlayerCard({ player, playerImage }) {
   return (
-
     <div>
-
-      <h2>Player Card</h2>
-
-
       {player && (
-
         <>
+          <img
+            className="player-image"
+            src={playerImage}
+            alt={player.displayName}
+          />
 
-          <h2>
-            {player.displayName}
-          </h2>
+          <h2>{player.displayName}</h2>
 
-
-          <p>
-            Height: {player.displayHeight}
-          </p>
-
-
-          <p>
-            Weight: {player.displayWeight}
-          </p>
-
-
-          <p>
-            Age: {player.age}
-          </p>
-
-
-          <p>
-            Experience: {player.experience.years} years
-          </p>
-
-
-          <p>
-            Status: {player.status.name}
-          </p>
-
-
+          <p>Position: {player.position?.name}</p>
+          <p>Jersey: #{player.jersey}</p>
+          <p>Height: {player.displayHeight}</p>
+          <p>Weight: {player.displayWeight}</p>
+          <p>Age: {player.age}</p>
+          <p>Experience: {player.experience?.years} years</p>
+          <p>Status: {player.status?.name}</p>
         </>
-
       )}
-
-
     </div>
-
   );
-
 }
-
 
 export default PlayerCard;

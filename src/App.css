@@ -54,3 +54,15 @@ section:last-child {
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0,0,0,.1);
 }
+
+.player-image {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.winner {
+  font-weight: bold;
+  border: 2px solid black;
+  padding: 8px;
+}

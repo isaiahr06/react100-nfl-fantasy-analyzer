@@ -1,5 +1,5 @@
 import { useState } from "react";
-function SearchBar({playerList, getPlayer}) {
+function SearchBar({playerList, getPlayer, getPlayerImage, getPlayer2, getPlayer2Image, getPlayerStats, getPlayer2Stats, year}) {
   const [search,setSearch] = useState("");
 
   const filteredPlayer = playerList.filter((player) =>
@@ -21,18 +21,35 @@ function SearchBar({playerList, getPlayer}) {
       />
 
       <div>
-        {filteredPlayer.map((player) => (
-          <button 
-            key={player.id}
-            onClick={() => getPlayer(player.id)}
+      {filteredPlayer.map((player) => (
+        <div key={player.id}>
+          
+          <button
+            onClick={() => {
+              getPlayer(player);
+              getPlayerImage(player.id);
+              getPlayerStats(player.id, year)
+            }}
           >
             {player.displayName}
           </button>
+
+          <button
+            onClick={() => {
+              getPlayer2(player);
+              getPlayer2Image(player.id);
+              getPlayer2Stats(player.id, year)
+            }}
+          >
+            Compare
+          </button>
+
+        </div>
         ))}
       </div>
 
     </section>
-  );
+      );
 
 }
 
