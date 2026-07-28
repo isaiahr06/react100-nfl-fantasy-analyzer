@@ -1,11 +1,10 @@
 function SeasonSelector({ year, setYear }) {
-
   return (
-    <section>
-
-      <label>Season: </label>
+    <div className="filter-control season-filter">
+      <label htmlFor="season-select">Season</label>
 
       <select
+        id="season-select"
         value={year}
         onChange={(e) => setYear(e.target.value)}
       >
@@ -15,8 +14,7 @@ function SeasonSelector({ year, setYear }) {
         <option value="2022">2022</option>
         <option value="2021">2021</option>
       </select>
-
-    </section>
+    </div>
   );
 }
 

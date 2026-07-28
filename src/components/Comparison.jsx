@@ -445,6 +445,8 @@ function Comparison({
       </div>
     </div>
 
+    
+
     <div className="comparison-group">
       <h3 className="comparison-group-title">
         Player Details

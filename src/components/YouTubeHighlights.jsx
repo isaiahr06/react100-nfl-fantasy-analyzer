@@ -10,10 +10,18 @@ function YouTubeHighlights({ player, player2 }) {
 
   useEffect(() => {
     if (!player && !player2) {
+      setPlayerVideos([]);
+      setPlayer2Videos([]);
+      setError("");
       return;
     }
 
     async function getHighlights() {
+      if (!apiKey) {
+        setError("YouTube API key is missing.");
+        return;
+      }
+
       try {
         setLoading(true);
         setError("");
@@ -32,7 +40,9 @@ function YouTubeHighlights({ player, player2 }) {
           );
 
           if (!response.ok) {
-            throw new Error("Unable to load YouTube highlights.");
+            throw new Error(
+              "Unable to load YouTube highlights."
+            );
           }
 
           const data = await response.json();
@@ -50,7 +60,12 @@ function YouTubeHighlights({ player, player2 }) {
         setPlayer2Videos(secondPlayerVideos);
       } catch (error) {
         console.error(error);
-        setError(error.message);
+
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Unable to load YouTube highlights."
+        );
       } finally {
         setLoading(false);
       }
@@ -63,42 +78,63 @@ function YouTubeHighlights({ player, player2 }) {
     return null;
   }
 
-  function renderVideos(videos) {
+  function renderVideos(videos, playerName) {
+    if (videos.length === 0) {
+      return (
+        <p className="highlights-message">
+          No highlights found for {playerName}.
+        </p>
+      );
+    }
+
     return (
       <div className="highlights-grid">
-        {videos.map((video) => (
-          <article
-            className="highlight-card"
-            key={video.id.videoId}
-          >
-            <a
-              href={`https://www.youtube.com/watch?v=${video.id.videoId}`}
-              target="_blank"
-              rel="noopener noreferrer"
+        {videos.map((video) => {
+          const videoId = video.id?.videoId;
+          const thumbnail =
+            video.snippet?.thumbnails?.medium?.url;
+
+          if (!videoId) {
+            return null;
+          }
+
+          return (
+            <article
+              className="highlight-card"
+              key={videoId}
             >
-              <img
-                className="highlight-thumbnail"
-                src={video.snippet.thumbnails.medium.url}
-                alt={video.snippet.title}
-              />
-            </a>
+              {thumbnail && (
+                <a
+                  href={`https://www.youtube.com/watch?v=${videoId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Watch ${video.snippet.title} on YouTube`}
+                >
+                  <img
+                    className="highlight-thumbnail"
+                    src={thumbnail}
+                    alt={video.snippet.title}
+                  />
+                </a>
+              )}
 
-            <div className="highlight-content">
-              <h3>{video.snippet.title}</h3>
+              <div className="highlight-content">
+                <h3>{video.snippet.title}</h3>
 
-              <p>{video.snippet.channelTitle}</p>
+                <p>{video.snippet.channelTitle}</p>
 
-              <a
-                className="watch-highlight-button"
-                href={`https://www.youtube.com/watch?v=${video.id.videoId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Watch Highlight
-              </a>
-            </div>
-          </article>
-        ))}
+                <a
+                  className="watch-highlight-button"
+                  href={`https://www.youtube.com/watch?v=${videoId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Watch Highlight
+                </a>
+              </div>
+            </article>
+          );
+        })}
       </div>
     );
   }
@@ -130,14 +166,22 @@ function YouTubeHighlights({ player, player2 }) {
       {!loading && !error && player && (
         <div className="player-highlights-group">
           <h2>{player.displayName}</h2>
-          {renderVideos(playerVideos)}
+
+          {renderVideos(
+            playerVideos,
+            player.displayName
+          )}
         </div>
       )}
 
       {!loading && !error && player2 && (
         <div className="player-highlights-group">
           <h2>{player2.displayName}</h2>
-          {renderVideos(player2Videos)}
+
+          {renderVideos(
+            player2Videos,
+            player2.displayName
+          )}
         </div>
       )}
     </section>

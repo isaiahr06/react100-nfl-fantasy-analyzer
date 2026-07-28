@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Header from "./components/Header";
 import SearchBar from "./components/SearchBar";
@@ -12,156 +12,164 @@ import nflApi from "./api/nflApi";
 
 import "./App.css";
 
-
 function App() {
-// selected player's full details
-const [player, setPlayer] = useState(null);
-// players from selected team's roster
-const [playerList, setPlayerList] = useState([]);
-// all NFL teams
-const [teams, setTeams] = useState([]);
-//stores player image url 
-const [playerImage, setPlayerImage] = useState(null);
-//2nd selected player's full details
-const [player2, setPlayer2] =useState(null);
-//stores 2nd player image url
-const [player2Image, setPlayer2Image] = useState(null);
-//Stores player 1 stats
-const [playerStats, setPlayerStats] = useState(null);
-//stores player 2 stats
-const [player2Stats, setPlayer2Stats] = useState(null);
-//stores the year
-const [year, setYear] = useState("2025");
+  // Selected player one's full details
+  const [player, setPlayer] = useState(null);
 
-useEffect(() => {
-  getTeams();
-}, []);
+  // Players from selected team's roster
+  const [playerList, setPlayerList] = useState([]);
 
+  // All NFL teams
+  const [teams, setTeams] = useState([]);
 
-  async function getPlayer(playerData){
+  // Player one image URL
+  const [playerImage, setPlayerImage] = useState(null);
 
-  const response = await nflApi.get(
-    `/nfl-player-info/v1/data?id=${playerData.id}`
-  );
+  // Selected player two's full details
+  const [player2, setPlayer2] = useState(null);
 
-  setPlayer({
-    ...response.data,
-    position: playerData.position
-  });
-}
+  // Player two image URL
+  const [player2Image, setPlayer2Image] = useState(null);
+
+  // Player one statistics
+  const [playerStats, setPlayerStats] = useState(null);
+
+  // Player two statistics
+  const [player2Stats, setPlayer2Stats] = useState(null);
+
+  // Selected season
+  const [year, setYear] = useState("2025");
+
+  useEffect(() => {
+    getTeams();
+  }, []);
+
+  async function getPlayer(playerData) {
+    const response = await nflApi.get(
+      `/nfl-player-info/v1/data?id=${playerData.id}`
+    );
+
+    setPlayer({
+      ...response.data,
+      position: playerData.position
+    });
+  }
 
   async function getPlayer2(playerData) {
+    const response = await nflApi.get(
+      `/nfl-player-info/v1/data?id=${playerData.id}`
+    );
 
-  const response = await nflApi.get(
-    `/nfl-player-info/v1/data?id=${playerData.id}`
-  );
-
-  setPlayer2({
-    ...response.data,
-    position: playerData.position
-  });
-}
+    setPlayer2({
+      ...response.data,
+      position: playerData.position
+    });
+  }
 
   async function getPlayerImage(id) {
-  const response = await nflApi.get(
-    `/nfl-ath-img?id=${id}`
-  );
+    const response = await nflApi.get(
+      `/nfl-ath-img?id=${id}`
+    );
 
-  setPlayerImage(response.data.image.href);
-}
+    setPlayerImage(response.data.image.href);
+  }
 
-async function getPlayer2Image(id) {
-  const response = await nflApi.get(
-    `/nfl-ath-img?id=${id}`
-  );
+  async function getPlayer2Image(id) {
+    const response = await nflApi.get(
+      `/nfl-ath-img?id=${id}`
+    );
 
-  setPlayer2Image(response.data.image.href);
-}
+    setPlayer2Image(response.data.image.href);
+  }
 
-async function getPlayers(teamId) {
+  async function getPlayers(teamId) {
+    const response = await nflApi.get(
+      `/nfl-player-listing/v1/data?id=${teamId}`
+    );
 
-  const response = await nflApi.get(
-    `/nfl-player-listing/v1/data?id=${teamId}`
-  );
+    const groups = response.data.athletes;
 
-  const groups = response.data.athletes;
+    const allPlayers = groups.flatMap(
+      (group) => group.items
+    );
 
-  const allPlayers = groups.flatMap(group => group.items);
+    setPlayerList(allPlayers);
 
-  setPlayerList(allPlayers);
+  }
 
-}
+  async function getTeams() {
+    const response = await nflApi.get(
+      "/nfl-team-listing/v1/data"
+    );
 
-async function getTeams() {
+    setTeams(response.data);
+  }
 
-  const response = await nflApi.get(
-    "/nfl-team-listing/v1/data"
-  );
+  async function getPlayerStats(id, selectedYear) {
+    const response = await nflApi.get(
+      `/nfl-ath-statistics?id=${id}&year=${selectedYear}`
+    );
 
-  console.log(response.data);
+    setPlayerStats(response.data);
+  }
 
-  setTeams(response.data);
+  async function getPlayer2Stats(id, selectedYear) {
+    const response = await nflApi.get(
+      `/nfl-ath-statistics?id=${id}&year=${selectedYear}`
+    );
 
-}
-
-async function getPlayerStats(id, year) {
-
-  const response = await nflApi.get(
-    `/nfl-ath-statistics?id=${id}&year=${year}`
-  );
-
-  console.log(response.data);
-
-  setPlayerStats(response.data);
-}
-
-async function getPlayer2Stats(id, year) {
-
-  const response = await nflApi.get(
-    `/nfl-ath-statistics?id=${id}&year=${year}`
-  );
-
-  console.log(response.data);
-
-  setPlayer2Stats(response.data);
-}
-
-
-function getStat(stats, categoryName, statName) {
-  return stats?.statistics?.splits?.categories
-    ?.find(category => category.name === categoryName)
-    ?.stats
-    ?.find(stat => stat.name === statName)
-    ?.displayValue;
-}
-
-
+    setPlayer2Stats(response.data);
+  }
 
   return (
     <>
       <Header />
 
-      <TeamSelector 
-        teams={teams}
-        getPlayers={getPlayers}
-      />
+      <main>
+        <div className="filters-panel">
+          <TeamSelector
+            teams={teams}
+            getPlayers={getPlayers}
+          />
 
-      <SeasonSelector
-        year={year}
-        setYear={setYear}
-      />
+          <div
+            className="filter-divider"
+            aria-hidden="true"
+          />
 
-      <SearchBar 
-        playerList={playerList}
-        selectedPlayer1={player}
-        getPlayer={getPlayer}
-        getPlayerImage={getPlayerImage}
-        getPlayer2={getPlayer2}
-        getPlayer2Image={getPlayer2Image}
-        getPlayerStats={getPlayerStats}
-        getPlayer2Stats={getPlayer2Stats}
-        year={year}
-      />
+          <SeasonSelector
+            year={year}
+            setYear={setYear}
+          />
+
+          <div
+            className="filter-divider"
+            aria-hidden="true"
+          />
+
+          <div className="filter-panel-brand">
+            <span className="filter-panel-badge">
+              NFL
+            </span>
+
+            <div>
+              <strong>Fantasy Analyzer</strong>
+              <span>{year} Season</span>
+            </div>
+          </div>
+        </div>
+
+        <SearchBar
+          playerList={playerList}
+          selectedPlayer1={player}
+          getPlayer={getPlayer}
+          getPlayerImage={getPlayerImage}
+          getPlayer2={getPlayer2}
+          getPlayer2Image={getPlayer2Image}
+          getPlayerStats={getPlayerStats}
+          getPlayer2Stats={getPlayer2Stats}
+          year={year}
+        />
 
         {player && player2 && (
           <section className="selected-players-section">
@@ -181,28 +189,28 @@ function getStat(stats, categoryName, statName) {
           </section>
         )}
 
-        {player && player2 && playerStats && player2Stats && (
-          <Comparison
-            player={player}
-            player2={player2}
-            playerStats={playerStats}
-            player2Stats={player2Stats}
-            playerImage={playerImage}
-            player2Image={player2Image}
-            year={year}
-          />
+        {player &&
+          player2 &&
+          playerStats &&
+          player2Stats && (
+            <Comparison
+              player={player}
+              player2={player2}
+              playerStats={playerStats}
+              player2Stats={player2Stats}
+              playerImage={playerImage}
+              player2Image={player2Image}
+              year={year}
+            />
+          )}
 
-          
-        )}
-
-      <YouTubeHighlights
-        player={player}
-        player2={player2}
-      />
-
+        <YouTubeHighlights
+          player={player}
+          player2={player2}
+        />
+      </main>
     </>
   );
 }
-
 
 export default App;
