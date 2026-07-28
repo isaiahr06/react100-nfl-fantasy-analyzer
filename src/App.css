@@ -183,42 +183,97 @@ header p {
   }
 }
 
-@media (max-width: 600px) {
-  .comparison-header {
-    grid-template-columns: 1fr;
-    text-align: center;
+@media (max-width: 900px) {
+  .search-section,
+  .selected-players-section,
+  .comparison-section,
+  .highlights-section {
+    width: 94%;
   }
 
-  @media (max-width: 600px) {
   .player-option-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (max-width: 600px) {
-  .comparison-title {
-    font-size: 1.5rem;
+  .player-cards-container {
+    gap: 16px;
   }
 
-  @media (max-width: 900px) {
+  .comparison-header {
+    gap: 16px;
+  }
+
+  .comparison-headshot {
+    width: 110px;
+    height: 110px;
+  }
+
   .highlights-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 600px) {
-  .highlights-heading {
-    align-items: flex-start;
-    flex-direction: column;
+  .search-section,
+  .selected-players-section,
+  .comparison-section,
+  .highlights-section {
+    width: 94%;
+    margin: 24px auto;
   }
 
-  .highlights-grid {
+  /* Search */
+
+  .player-search-input {
+    max-width: none;
+  }
+
+  .player-option-grid {
     grid-template-columns: 1fr;
   }
 
-  .highlights-heading h2 {
+  .player-option-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .select-player-button,
+  .compare-player-button {
+    min-height: 44px;
+  }
+
+  /* Selected players */
+
+  .player-cards-container {
+    grid-template-columns: 1fr;
+  }
+
+  .player-card {
+    padding: 18px;
+  }
+
+  .player-card-image {
+    width: 110px;
+    height: 110px;
+  }
+
+  /* Comparison */
+
+  .comparison-title {
     font-size: 1.5rem;
   }
-}
+
+  .comparison-header {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .comparison-player {
+    justify-content: center;
+  }
+
+  .comparison-vs {
+    margin: 4px auto;
+  }
 
   .comparison-summary {
     grid-template-columns: 1fr;
@@ -227,25 +282,55 @@ header p {
   .comparison-group-title {
     text-align: center;
   }
-}
 
-  .player-option-actions {
+  .stat-row,
+  .detail-row {
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 6px;
+    padding: 12px 6px;
+    font-size: 0.85rem;
+  }
+
+  .stat-label,
+  .detail-label {
+    font-size: 0.8rem;
+  }
+
+  /* YouTube */
+
+  .highlights-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .highlights-heading h2 {
+    font-size: 1.5rem;
+  }
+
+  .highlights-grid {
     grid-template-columns: 1fr;
   }
+
+  .youtube-search-link,
+  .watch-highlight-button {
+    min-height: 44px;
+  }
 }
 
-  .comparison-player {
-    flex-direction: column;
+@media (max-width: 400px) {
+  .stat-row,
+  .detail-row {
+    grid-template-columns: 0.8fr 1.4fr 0.8fr;
+    font-size: 0.78rem;
   }
 
-  .comparison-vs {
-    margin: 10px 0;
+  .comparison-headshot {
+    width: 95px;
+    height: 95px;
   }
 
-  .detail-row,
-  .stat-row {
-    grid-template-columns: 1fr 1.4fr 1fr;
-    gap: 8px;
+  .summary-card {
+    padding: 16px;
   }
 }
 
@@ -279,6 +364,26 @@ header p {
 .player-search-input:focus {
   outline: 3px solid rgba(1, 51, 105, 0.2);
   border-color: #013369;
+}
+
+.empty-message {
+  padding: 20px;
+  text-align: center;
+  color: #687382;
+  background: white;
+  border: 1px solid #d8dde3;
+  border-radius: 10px;
+}
+
+.select-player-button:disabled,
+.compare-player-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.select-player-button:disabled:hover,
+.compare-player-button:disabled:hover {
+  transform: none;
 }
 
 /* =========================
@@ -567,4 +672,34 @@ header p {
 
 .player-highlights-group > h2 {
   margin-bottom: 16px;
+}
+
+/* =========================
+   Global Responsive Safety
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+/* Prevent long names and titles from breaking cards */
+.player-option-name,
+.highlight-content h3,
+.comparison-player-info h3 {
+  overflow-wrap: anywhere;
 }

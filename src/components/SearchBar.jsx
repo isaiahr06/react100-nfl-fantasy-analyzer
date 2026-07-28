@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function SearchBar({
   playerList,
+  selectedPlayer1,
   getPlayer,
   getPlayerImage,
   getPlayer2,
@@ -62,13 +63,16 @@ function SearchBar({
 
               <button
                 className="compare-player-button"
+                disabled={player.id === selectedPlayer1?.id}
                 onClick={() => {
                   getPlayer2(player);
                   getPlayer2Image(player.id);
                   getPlayer2Stats(player.id, year);
                 }}
               >
-                Select Player 2
+                {player.id === selectedPlayer1?.id
+                  ? "Already Selected"
+                  : "Select Player 2"}
               </button>
             </div>
           </article>

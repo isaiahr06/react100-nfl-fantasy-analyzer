@@ -153,6 +153,7 @@ function getStat(stats, categoryName, statName) {
 
       <SearchBar 
         playerList={playerList}
+        selectedPlayer1={player}
         getPlayer={getPlayer}
         getPlayerImage={getPlayerImage}
         getPlayer2={getPlayer2}
