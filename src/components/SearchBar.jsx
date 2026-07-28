@@ -31,6 +31,12 @@ function SearchBar({
         onChange={(e) => setSearch(e.target.value)}
       />
 
+      {search && filteredPlayer.length === 0 && (
+        <p className="empty-message">
+          No players found for "{search}".
+        </p>
+      )}
+
       <div className="player-option-grid">
         {filteredPlayer.map((player) => (
           <article
