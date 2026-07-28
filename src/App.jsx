@@ -4,9 +4,9 @@ import Header from "./components/Header";
 import SearchBar from "./components/SearchBar";
 import PlayerCard from "./components/PlayerCard";
 import Comparison from "./components/Comparison";
-import NewsFeed from "./components/NewsFeed";
 import TeamSelector from "./components/TeamSelector";
 import SeasonSelector from "./components/SeasonSelector";
+import YouTubeHighlights from "./components/YouTubeHighlights";
 
 import nflApi from "./api/nflApi";
 
@@ -162,67 +162,42 @@ function getStat(stats, categoryName, statName) {
         year={year}
       />
 
-      <div className="player-container">
+        {player && player2 && (
+          <section className="selected-players-section">
+            <h2>Selected Players</h2>
 
-        <PlayerCard
-          player={player}
-          playerImage={playerImage}
-        />
+            <div className="player-cards-container">
+              <PlayerCard
+                player={player}
+                playerImage={playerImage}
+              />
 
-        <PlayerCard
-          player={player2}
-          playerImage={player2Image}
-        />
-
-        {playerStats && (
-          <div>
-            <h2>{player?.displayName} - {year} Stats</h2>
-
-            <p>Passing Yards: {getStat(playerStats, "passing", "passingYards")}</p>
-
-            <p>Passing TDs: {getStat(playerStats, "passing", "passingTouchdowns")}</p>
-
-            <p>Interceptions: {getStat(playerStats, "passing", "interceptions")}</p>
-
-            <p>Completion %: {getStat(playerStats, "passing", "completionPct")}</p>
-
-            <p>Rushing Yards: {getStat(playerStats, "rushing", "rushingYards")}</p>
-
-            <p>Rushing TDs: {getStat(playerStats, "rushing", "rushingTouchdowns")}</p>
-          </div>
+              <PlayerCard
+                player={player2}
+                playerImage={player2Image}
+              />
+            </div>
+          </section>
         )}
 
-        {player2Stats && (
-          <div>
-            <h2>{player2?.displayName} - {year} Stats</h2>
+        {player && player2 && playerStats && player2Stats && (
+          <Comparison
+            player={player}
+            player2={player2}
+            playerStats={playerStats}
+            player2Stats={player2Stats}
+            playerImage={playerImage}
+            player2Image={player2Image}
+            year={year}
+          />
 
-            <p>Passing Yards: {getStat(player2Stats, "passing", "passingYards")}</p>
-
-            <p>Passing TDs: {getStat(player2Stats, "passing", "passingTouchdowns")}</p>
-
-            <p>Interceptions: {getStat(player2Stats, "passing", "interceptions")}</p>
-
-            <p>Completion %: {getStat(player2Stats, "passing", "completionPct")}</p>
-
-            <p>Rushing Yards: {getStat(player2Stats, "rushing", "rushingYards")}</p>
-
-            <p>Rushing TDs: {getStat(player2Stats, "rushing", "rushingTouchdowns")}</p>
-          </div>
+          
         )}
 
-      </div>
-
-
-
-      <Comparison
+      <YouTubeHighlights
         player={player}
         player2={player2}
-        playerStats={playerStats}
-        player2Stats={player2Stats}
-        year={year}
       />
-
-      <NewsFeed />
 
     </>
   );

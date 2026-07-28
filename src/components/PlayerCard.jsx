@@ -1,26 +1,32 @@
 function PlayerCard({ player, playerImage }) {
+  if (!player) {
+    return null;
+  }
+
   return (
-    <div>
-      {player && (
-        <>
-          <img
-            className="player-image"
-            src={playerImage}
-            alt={player.displayName}
-          />
-
-          <h2>{player.displayName}</h2>
-
-          <p>Position: {player.position?.name}</p>
-          <p>Jersey: #{player.jersey}</p>
-          <p>Height: {player.displayHeight}</p>
-          <p>Weight: {player.displayWeight}</p>
-          <p>Age: {player.age}</p>
-          <p>Experience: {player.experience?.years} years</p>
-          <p>Status: {player.status?.name}</p>
-        </>
+    <article className="player-card">
+      {playerImage && (
+        <img
+          src={playerImage}
+          alt={player.displayName}
+          className="player-card-image"
+        />
       )}
-    </div>
+
+      <h2>{player.displayName}</h2>
+
+      <p className="player-card-position">
+        {player.position?.name ?? "Position unavailable"}
+      </p>
+
+      <p className="player-card-jersey">
+        #{player.jersey ?? "N/A"}
+      </p>
+
+      <p className="player-card-status">
+        {player.status?.name ?? "Status unavailable"}
+      </p>
+    </article>
   );
 }
 
