@@ -20,7 +20,7 @@ function Comparison({
       ?.displayValue
       ?.replace(/,/g, "");
   }
-
+//EX: getStat(playerStats, "passing", "passingYards")
 // --------------------
 // Winner Helpers
 // --------------------
