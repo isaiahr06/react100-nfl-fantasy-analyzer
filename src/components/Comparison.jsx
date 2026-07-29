@@ -369,12 +369,12 @@ function Comparison({
     <div className="comparison-summary">
       <div className="summary-card">
         <p className="summary-label">Overall Winner</p>
-        <h3>{getWinnerName(getOverallWinner())}</h3>
+        <h3>{getWinnerName(overallWinner)}</h3>
       </div>
 
       <div className="summary-card">
         <p className="summary-label">Fantasy Winner</p>
-        <h3>{getWinnerName(getFantasyWinner())}</h3>
+        <h3>{getWinnerName(fantasyWinner)}</h3>
       </div>
     </div>
 
